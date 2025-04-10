@@ -1,5 +1,3 @@
-# https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs/resources/container
-
 resource "random_string" "nginx" {
   length  = 8
   upper   = false
@@ -71,7 +69,6 @@ resource "docker_container" "traefik" {
     label = "traefik.port"
     value = 8080
   }
-
 }
 
 resource "docker_container" "nginx" {
@@ -89,17 +86,17 @@ resource "docker_container" "nginx" {
   memory = 256
 
   volumes {
-    host_path      = "/Users/ruan/personal/terraform-playground/docker-containers/html"
+    host_path      = abspath("${path.module}/html")
     container_path = "/usr/share/nginx/html"
   }
 
   volumes {
-    host_path      = "/Users/ruan/personal/terraform-playground/docker-containers/configs/nginx.conf"
+    host_path      = abspath("${path.module}/configs/nginx.conf")
     container_path = "/etc/nginx/nginx.conf"
   }
 
   volumes {
-    host_path      = "/Users/ruan/personal/terraform-playground/docker-containers/configs/app.conf"
+    host_path      = abspath("${path.module}/configs/app.conf")
     container_path = "/etc/nginx/conf.d/app.conf"
   }
 
@@ -132,5 +129,4 @@ resource "docker_container" "nginx" {
     docker_container.traefik,
     random_string.nginx
   ]
-
 }
